@@ -55,28 +55,28 @@ const buttons = document.querySelectorAll("button");
 const numbers = document.querySelectorAll(".number");
 const operators = document.querySelectorAll(".operator");
 const equals = document.querySelector(".equals");
-
+const undo = document.querySelector(".undo");
 
 numbers.forEach(number => number.addEventListener("click", buttonHandler));
-// operators.forEach(operator => operator.addEventListener("click", resetDisplay));
+
 operators.forEach(operator => operator.addEventListener("click", buttonHandler));
 
 
 window.addEventListener("keydown", keyboardHandler);
 
 equals.addEventListener("click", makeCalculation);
-
-//TODO Add decimal point button handlers. 
+ 
 dot.addEventListener("click", buttonHandler);
 // Add a flag to mark when the keyboard input should not use the decimal. 
 canDot = true;
 // TODOAdd a backspace button. 
+undo.addEventListener("click", deleteLastInput);
 
-//TODO make it look nice with CSS. 
 
 operatorArray = ["+", "-","/","*"];
 
 function keyboardHandler(e){
+	console.log(e.key);
 	e.preventDefault();
 	if (e.key >= 0 && e.key < 10 || e.key ==="." && canDot === true){
 		updateInputDisplay(e.key);
@@ -89,11 +89,10 @@ function keyboardHandler(e){
 		makeCalculation();
 	}else if(e.key === "c"){
 		resetCalculator();
+	}else if (e.key ==="Backspace"){
+		deleteLastInput();
 	}
-	// else if (e.key ==="." && canDot === true){
-	// 	updateInputDisplay(e.key);
 
-	// }
 }
 
 function buttonHandler(e){
@@ -117,27 +116,36 @@ function updateInputDisplay(value){
 	console.log(`Displaying input numbers`)
 }
 
+function deleteLastInput(){
+	let inputString = input.textContent;
+
+	// Add event listener for decimal back in if it was deleted. 
+	if (inputString.charAt(inputString.length -1) === "."){
+		dot.addEventListener("click", buttonHandler);
+		canDot = true;	
+	}
+	// remove the last letter from input and replace string. 
+	input.textContent = inputString.slice(0, inputString.length-1);
+
+}
 
 function storeInput(value){
-	//TODO be able to string several together and still get teh right answer. 
+	//TODO be able to string several together and still get teh right answer. Add a running total
 
 	// Move input when pressing an operation key to the stored data display so a new value can be input. 
 	displayValue = inputValue;
-	//only add content to display content if no
+
 	lastCharacter = display.textContent.charAt(display.textContent.length-1);
-	console.log(lastCharacter)
 	// add on to display only if last character is an operator or if display is blank.
 	if (display.textContent === "" || operatorArray.includes(lastCharacter)){
 		display.textContent += displayValue;
 	}
 	operation = value;
-	// alert(display.textContent)
 	display.textContent += " " + operation;
 	console.log(`storing input `)
 	resetDisplay()
-	//Add decimal point button handler back in. 
+	//Add decimal point handlers back in. 
 	dot.addEventListener("click", buttonHandler);
-	// Add decimal point keyboard handler back in
 	canDot = true;
 }
 
@@ -153,7 +161,11 @@ function makeCalculation(e){
 		resetCalculator();
 		return 
 	}
-	// TODO if result is not an int make sure to round it to X decimals
+	// If result is not a whole number round it to X decimals.
+	if (result % 1 !== 0){
+		result = result.toPrecision(8);
+	}
+
 	resetDisplay()
 	display.textContent = result;
 	console.log(`Make calculation = ${display.textContent}`);

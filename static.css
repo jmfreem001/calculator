@@ -17,7 +17,7 @@
     grid-area: display;
     background-color: #fafafa;
     height:40px;
-    width:120px;
+    width:138px;
     font-family: 'Orbitron', sans-serif;
     border: 2px solid black; 
     padding: 5px;
@@ -26,7 +26,7 @@
 .input{
     font-family: 'Orbitron', sans-serif;
     height:20px;
-    width:120px;
+    width:138px;
     border: 2px solid black;
     padding: 5px;
     margin: 2px;
@@ -36,7 +36,9 @@
     /* color:rgb(171, 171, 243);
     background-color: black; */
 }
-.zero{
+.zero{od formats a number to a specified length.
+
+    A decimal point and nulls are added (if needed), to create the specified l
     grid-area: zero;
 }
 .one{
