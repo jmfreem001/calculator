@@ -6,24 +6,19 @@ function subtract (a, b) {
 	return a - b;
 }
 
-function sum (list) {
-	return list.reduce((total,value) => total + value, 0);
-}
-
 function multiply (list) {
 	let product = list.reduce((total, value) => {
 		return total * value;
 	});
 	return product;
 }
+
 function divide(list){
 	let output = list.reduce((total, value) => {
 		return total / value;
 	});
 	return output;
 }
-
-
 
 function operate(a, b, op){
 	//takes an operator and 2 numbers and then calls a function on the numbers.
@@ -47,10 +42,8 @@ function operate(a, b, op){
 
 const display = document.querySelector(".display");
 const input = document.querySelector(".input");
-
 const dot = document.querySelector(".dot");
 const clear = document.getElementById("clear");
-
 const buttons = document.querySelectorAll("button");
 const numbers = document.querySelectorAll(".number");
 const operators = document.querySelectorAll(".operator");
@@ -58,26 +51,25 @@ const equals = document.querySelector(".equals");
 const undo = document.querySelector(".undo");
 
 numbers.forEach(number => number.addEventListener("click", buttonHandler));
-
 operators.forEach(operator => operator.addEventListener("click", buttonHandler));
 
 
 window.addEventListener("keydown", keyboardHandler);
-
-equals.addEventListener("click", makeCalculation);
- 
+equals.addEventListener("click", makeCalculation); 
 dot.addEventListener("click", buttonHandler);
 // Add a flag to mark when the keyboard input should not use the decimal. 
 canDot = true;
-// TODOAdd a backspace button. 
 undo.addEventListener("click", deleteLastInput);
+clear.addEventListener("click", resetCalculator);
 
+let operatorArray = ["+", "-","/","*"];
 
-operatorArray = ["+", "-","/","*"];
+let displayValue = "";
+let inputValue = "";
+let operation = "";
+let total = 0;
 
 function keyboardHandler(e){
-	console.log(e.key);
-	// e.preventDefault();
 	if (e.key >= 0 && e.key < 10 || e.key ==="." && canDot === true){
 		updateInputDisplay(e.key);
 	}else if(operatorArray.includes(e.key)){
@@ -181,7 +173,6 @@ function makeCalculation(e){
 		}
 		result = result.toFixed(decimalPlaces);
 	}
-
 	resetInput()
 	display.textContent = result;
 	console.log(`Make calculation = ${display.textContent}`);
@@ -190,8 +181,6 @@ function makeCalculation(e){
 	// alert(`Make calculation: posttotal display box = ${display.textContent}`);
 	
 }
-
-clear.addEventListener("click", resetCalculator);
 
 function resetCalculator(){
 	resetInput();
@@ -206,13 +195,8 @@ function resetCalculator(){
 	canDot = true;
 }
 
-
 function resetInput(){
 	input.textContent = "";
 }
 
 
-let displayValue = "";
-let inputValue = "";
-let operation = "";
-let total = 0;
