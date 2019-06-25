@@ -140,6 +140,12 @@ function storeInput(value){
 	if (display.textContent === "" || operatorArray.includes(lastCharacter)){
 		display.textContent += displayValue;
 	}
+	if (operatorArray.includes(lastCharacter)){
+		// operation uses operation before it is reassigned to the new value
+		total = operate(Number(total), Number(displayValue), operation);
+	}else if (total === 0){
+		total = displayValue;
+	}
 	operation = value;
 	display.textContent += " " + operation;
 	console.log(`storing input `)
@@ -173,7 +179,7 @@ function makeCalculation(e){
 		if (decimalPlaces > 8){
 			decimalPlaces = 8;
 		}
-		result = result.toPrecision(decimalPlaces+1);
+		result = result.toFixed(decimalPlaces);
 	}
 
 	resetInput()
