@@ -77,7 +77,7 @@ operatorArray = ["+", "-","/","*"];
 
 function keyboardHandler(e){
 	console.log(e.key);
-	e.preventDefault();
+	// e.preventDefault();
 	if (e.key >= 0 && e.key < 10 || e.key ==="." && canDot === true){
 		updateInputDisplay(e.key);
 	}else if(operatorArray.includes(e.key)){
@@ -143,7 +143,7 @@ function storeInput(value){
 	operation = value;
 	display.textContent += " " + operation;
 	console.log(`storing input `)
-	resetDisplay()
+	resetInput()
 	//Add decimal point handlers back in. 
 	dot.addEventListener("click", buttonHandler);
 	canDot = true;
@@ -153,6 +153,9 @@ function makeCalculation(e){
 	// updates total and displays when equals button is pressed
 	if (inputValue === ""){
 		alert("Please enter a value.")
+	}else if (displayValue ===""){
+		alert("No operation selected.")
+		return;
 	}
 	let startingValue = total === 0 ? displayValue: total;
 	console.log(`Calculating ${startingValue} ${operation} ${inputValue}`)
@@ -163,10 +166,17 @@ function makeCalculation(e){
 	}
 	// If result is not a whole number round it to X decimals.
 	if (result % 1 !== 0){
-		result = result.toPrecision(8);
+		resultString = `${result}`;
+		splitResult = resultString.split(".");
+		let decimalPlaces = splitResult[1].length;
+		console.log(`Decimal places ${decimalPlaces}`);
+		if (decimalPlaces > 8){
+			decimalPlaces = 8;
+		}
+		result = result.toPrecision(decimalPlaces+1);
 	}
 
-	resetDisplay()
+	resetInput()
 	display.textContent = result;
 	console.log(`Make calculation = ${display.textContent}`);
 	//update result with the ongoing calculation
@@ -178,17 +188,20 @@ function makeCalculation(e){
 clear.addEventListener("click", resetCalculator);
 
 function resetCalculator(){
-	resetDisplay();
+	resetInput();
 	inputValue = "";
 	displayValue = "";
 	display.textContent = "";
 	console.log(`resetting Calculator`)
 	operation = "";
 	total = 0;
+	//Add decimal point handlers back in. 
+	dot.addEventListener("click", buttonHandler);
+	canDot = true;
 }
 
 
-function resetDisplay(){
+function resetInput(){
 	input.textContent = "";
 }
 
